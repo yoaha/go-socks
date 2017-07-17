@@ -25,6 +25,7 @@ import (
 	"io"
 	"net"
 	"strconv"
+	"time"
 )
 
 const (
@@ -80,6 +81,15 @@ type Proxy struct {
 }
 
 func (p *Proxy) Dial(network, addr string) (net.Conn, error) {
+	return p.dial(network, addr, 0)
+}
+
+func (p *Proxy) DialTimeout(network, addr string, timeout time.Duration) (net.Conn, error) {
+	return p.dial(network, addr, timeout)
+}
+
+func (p *Proxy) dial(network, addr string, timeout time.Duration) (net.Conn, error) {
+
 	host, strPort, err := net.SplitHostPort(addr)
 	if err != nil {
 		return nil, err
